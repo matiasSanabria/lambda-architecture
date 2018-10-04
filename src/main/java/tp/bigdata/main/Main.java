@@ -7,16 +7,16 @@ import org.apache.hadoop.fs.Path;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.util.Date;
 
-import tp.bigdata.batchlayer.BatchWorkflow;
-import tp.bigdata.schema.Page;
-import tp.bigdata.schema.Product;
-import tp.bigdata.schema.User;
 import tp.bigdata.tap.DataPailStructure;
-import tp.bigdata.tap.SplitDataPailStructure;
+//import tp.bigdata.tap.SplitDataPailStructure;
 
+//import static tp.bigdata.batchlayer.BatchWorkflow.MASTER_ROOT;
+import static tp.bigdata.batchlayer.BatchWorkflow.NEW_ROOT;
+import static tp.bigdata.batchlayer.BatchWorkflow.DATA_ROOT;
 import static tp.bigdata.batchlayer.BatchWorkflow.batchWorkflow;
-import static tp.bigdata.test.Data.makeUserPurchase;
+import static tp.bigdata.test.DataProcess.makeFacts;
 
 @SuppressWarnings({ "unchecked", "rawtypes" })
 public class Main {
@@ -32,6 +32,7 @@ public class Main {
 		}
 		
 		String path = args[0];
+		System.out.println("path:" + path);
 		
 		initTestData(path);
 		batchWorkflow();
@@ -39,12 +40,12 @@ public class Main {
 	
 	public static void initTestData(String path) throws Exception {
 		FileSystem fs = FileSystem.get(new Configuration());
-		fs.delete(new Path(BatchWorkflow.DATA_ROOT), true);
-		fs.mkdirs(new Path(BatchWorkflow.DATA_ROOT));
+		fs.delete(new Path(DATA_ROOT), true);
+		fs.mkdirs(new Path(DATA_ROOT));
 		
-		Pail masterPail = Pail.create(BatchWorkflow.MASTER_ROOT, new SplitDataPailStructure());
-		Pail newPail = Pail.create(BatchWorkflow.NEW_ROOT, new DataPailStructure());
-		
+//		Pail masterPail = Pail.create(MASTER_ROOT, new SplitDataPailStructure());
+		Pail newPail = Pail.create(NEW_ROOT, new DataPailStructure());
+
 		Pail.TypedRecordOutputStream os;
 		
 		File file = new File(path);
@@ -60,50 +61,23 @@ public class Main {
 				String line = reader.readLine();
 				
 				while ((line = reader.readLine()) != null) {
+					System.out.println(line);
 					String[] tokens = line.split(",");
 					
-//					long timeSecs = new Data().getTime();
-					String userId = tokens[0];
-					String username = tokens[1];
-					String name = tokens[2];
-					String email = tokens[3];
-					String userType = tokens[4];
-					String address = tokens[5];
-					String birdthday = tokens[6];
-					String phone = tokens[7];
-					String url = tokens[8];
-					String urlType = tokens[9];
-					String barcode = tokens[10];
-					String description = tokens[11];
-					String salePrice = tokens[12];
-					String stock = tokens[13];
-					String quantity = tokens[14];
-					
-					User user = new User();
-					user.set_user_id(Long.parseLong(userId));
-					user.set_username(username);
-					user.set_name(name);
-					user.set_email(email);
-					user.set_user_type(userType);
-					user.set_address(address);
-					user.set_birthday(birdthday);
-					user.set_phone(phone);
-					
-					Page page = new Page();
-					page.set_url(url);
-					page.set_url_type(urlType);
-					
-					Product product = new Product();
-					product.set_barcode(barcode);
-					product.set_description(description);
-					product.set_sale_price(Double.parseDouble(salePrice));
-					product.set_stock(Double.parseDouble(stock));
-					
-					os.writeObject(makeUserPurchase(1, 
-													user, 
-													product, 
-													Integer.parseInt(quantity), 
-													Integer.parseInt("123456")));
+					String username = tokens[0];
+					String url = tokens[1];
+					String barcode = tokens[2];
+					String quantity = tokens[3];
+					String date = tokens[4];
+					Long timeSecs = new Date().getTime();
+										
+					os.writeObject(
+							makeFacts(
+									username, 
+									url, 
+									barcode,Integer.parseInt(quantity), 
+									date, 
+									timeSecs));
 					os.close();
 				}
 			} finally {

@@ -2,19 +2,22 @@ package tp.bigdata.test;
 
 import tp.bigdata.schema.*;
 
-public class Data {
-	public static Pedigree makePedigree(int timeSecs) {
+public class DataProcess {
+	public static Pedigree makePedigree(Long timeSecs) {
 		return new Pedigree(timeSecs);
 	}
 	
-	public static tp.bigdata.schema.Data makeUserPurchase(
-			int purchaseId, User user, Product product, int quantity, int timeSecs) {
-
-		UserPurchaseEdge upe = new UserPurchaseEdge(purchaseId, user, product, quantity);
-		UserProperty up = new UserProperty(upe, null);
-		DataUnit du = new DataUnit();		
+	public static Data makeFacts(String username, String pageUrl, 
+			String barcode, int quantity, String date, Long timeSecs) {
+		return new Data(makePedigree(timeSecs),
+				DataUnit.factsEdge(
+						new FactsEdge(User.username(username),
+									Page.url(pageUrl),
+									Product.barcode(barcode),
+									quantity,
+									date
+							)
+					));
 		
-		du.set_user_property(up);
-		return new tp.bigdata.schema.Data(du, new Pedigree(timeSecs));
 	}
 }
