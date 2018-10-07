@@ -124,7 +124,7 @@ public class SplitDataPailStructure extends DataPailStructure {
 
             if (s instanceof EdgeStructure) {
                 String fieldName = dirs[1];
-                //Agregar aquí los criterios de particionamiento horizontal (Edges)
+                // Agregamos los criterios de particionamiento horizontal (Edges)
                 System.out.println("fieldName: " + fieldName);
                 switch (fieldName) {
                     case ("factsEdge"):
@@ -170,26 +170,13 @@ public class SplitDataPailStructure extends DataPailStructure {
         String fieldName = setField.getFieldName();
         ret.add(fieldName);
 
-        //Agregar aquí los criterios de particionamiento horizontal
+        // criterios de particionamiento horizontal
         switch (fieldName) {
-            /*
-            * case ("xxx"):
-            *   ret.add("criterio_de_particionamiento_1")
-            *   ret.add("criterio_de_particionamiento_2")
-            *   ...
-            * */
             case ("factsEdge"):
-                String date = du.get_factsEdge().get_date();
-                ret.add(date);
+            	// obtenemos el anho para realizar la particion
+                String[] date = du.get_factsEdge().get_date().split("/");
+                ret.add(date[2]);
                 break;
-            /*
-            case ("internetUseProperty"):
-                break;
-            case ("individualTypeProperty"):
-                break;
-            case("geographyProperty"):
-                break;
-            */
         }
 
         validFieldMap.get(id).fillTarget(ret, du.getFieldValue());

@@ -4,6 +4,8 @@ import com.backtype.hadoop.pail.Pail;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
+import org.apache.hadoop.fs.permission.FsPermission;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -40,6 +42,7 @@ public class Main {
 	
 	public static void initTestData(String path) throws Exception {
 		FileSystem fs = FileSystem.get(new Configuration());
+//		fs.setPermission(new Path(ROOT), new FsPermission("777"));
         fs.delete(new Path(DATA_ROOT), true);
         fs.mkdirs(new Path(DATA_ROOT));
 		

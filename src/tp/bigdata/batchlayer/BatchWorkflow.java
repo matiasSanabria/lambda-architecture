@@ -20,11 +20,11 @@ import org.apache.hadoop.fs.Path;
 
 @SuppressWarnings({ "rawtypes", "unchecked" })
 public class BatchWorkflow {
-	public static final String ROOT = "/home/matt/";
+	public static final String ROOT = "/root/";
 	public static final String DATA_ROOT = ROOT + "data/";
 	public static final String MASTER_ROOT = DATA_ROOT + "master/";
 	public static final String NEW_ROOT = DATA_ROOT + "new/";
-	public static final String TEMP_ROOT = "/home/matt/temp/";
+	public static final String TEMP_ROOT = ROOT + "temp/";
 
 	public static void batchWorkflow() throws IOException {
 		setApplicationConf();
@@ -36,8 +36,10 @@ public class BatchWorkflow {
 
 	public static void ingest(Pail masterPail, Pail newDataPail) throws IOException {
 		FileSystem fs = FileSystem.get(new Configuration());
-		fs.delete(new Path(TEMP_ROOT), true);
-		fs.mkdirs(new Path(TEMP_ROOT));
+		Path tempRootPath = new Path(TEMP_ROOT);
+		
+		fs.delete(tempRootPath, true);
+		fs.mkdirs(tempRootPath);
 		String snapshotPath = TEMP_ROOT + "newDataSnapshot";
 
 		Pail snapshotPail = newDataPail.snapshot(snapshotPath);
