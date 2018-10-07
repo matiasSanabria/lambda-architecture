@@ -1,5 +1,5 @@
-namespace php tpBigData.schema
-namespace java tpBigData.schema
+namespace php tp.bigdata.schema
+namespace java tp.bigdata.schema
 
 # Nodes
 union User {
