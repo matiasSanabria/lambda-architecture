@@ -10,9 +10,9 @@ import java.io.FileReader;
 import java.util.Date;
 
 import tp.bigdata.tap.DataPailStructure;
-//import tp.bigdata.tap.SplitDataPailStructure;
+import tp.bigdata.tap.SplitDataPailStructure;
 
-//import static tp.bigdata.batchlayer.BatchWorkflow.MASTER_ROOT;
+import static tp.bigdata.batchlayer.BatchWorkflow.MASTER_ROOT;
 import static tp.bigdata.batchlayer.BatchWorkflow.NEW_ROOT;
 import static tp.bigdata.batchlayer.BatchWorkflow.DATA_ROOT;
 import static tp.bigdata.batchlayer.BatchWorkflow.batchWorkflow;
@@ -40,13 +40,13 @@ public class Main {
 	
 	public static void initTestData(String path) throws Exception {
 		FileSystem fs = FileSystem.get(new Configuration());
-		fs.delete(new Path(DATA_ROOT), true);
-		fs.mkdirs(new Path(DATA_ROOT));
+        fs.delete(new Path(DATA_ROOT), true);
+        fs.mkdirs(new Path(DATA_ROOT));
 		
-//		Pail masterPail = Pail.create(MASTER_ROOT, new SplitDataPailStructure());
-		Pail newPail = Pail.create(NEW_ROOT, new DataPailStructure());
+        Pail masterPail = Pail.create(MASTER_ROOT, new SplitDataPailStructure());
+        Pail newPail = Pail.create(NEW_ROOT, new DataPailStructure());
 
-		Pail.TypedRecordOutputStream os;
+        Pail.TypedRecordOutputStream os;
 		
 		File file = new File(path);
 		File[] files = file.listFiles();
@@ -70,7 +70,7 @@ public class Main {
 					String quantity = tokens[3];
 					String date = tokens[4];
 					Long timeSecs = new Date().getTime();
-										
+					
 					os.writeObject(
 							makeFacts(
 									username, 
@@ -78,8 +78,10 @@ public class Main {
 									barcode,Integer.parseInt(quantity), 
 									date, 
 									timeSecs));
-					os.close();
 				}
+
+				os.close();
+			
 			} finally {
 				if (reader != null) {
 					reader.close();

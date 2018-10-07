@@ -18,7 +18,6 @@ import org.apache.thrift.meta_data.StructMetaData;
 public class SplitDataPailStructure extends DataPailStructure {
     protected static interface FieldStructure {
         public boolean isValidTarget(String[] dirs);
-
         public void fillTarget(List<String> ret, Object val);
     }
 
@@ -126,10 +125,12 @@ public class SplitDataPailStructure extends DataPailStructure {
             if (s instanceof EdgeStructure) {
                 String fieldName = dirs[1];
                 //Agregar aquí los criterios de particionamiento horizontal (Edges)
+                System.out.println("fieldName: " + fieldName);
                 switch (fieldName) {
                     case ("factsEdge"):
                         if (dirs.length < 3) return false;
                         int year = Integer.parseInt(dirs[2]);
+                        System.out.println("dirs[2]: " + dirs[2]);
                         return 1900 < year && year < 2100;
                     default:
                         return false;
@@ -140,11 +141,11 @@ public class SplitDataPailStructure extends DataPailStructure {
                 String fieldName = dirs[1];
                 //Agregar aquí los criterios de particionamiento horizontal (Properties)
                 switch (fieldName) {
-                    case ("internetUseProperty"):
+                    case ("userProperty"):
                         return true;
-                    case ("individualTypeProperty"):
+                    case ("pageProperty"):
                         return true;
-                    case ("geographyProperty"):
+                    case ("productProperty"):
                         return true;
                     default:
                         return false;
