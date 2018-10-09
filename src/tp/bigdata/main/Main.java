@@ -4,7 +4,6 @@ import com.backtype.hadoop.pail.Pail;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
-import org.apache.hadoop.fs.permission.FsPermission;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -19,8 +18,9 @@ import static tp.bigdata.batchlayer.BatchWorkflow.NEW_ROOT;
 import static tp.bigdata.batchlayer.BatchWorkflow.DATA_ROOT;
 import static tp.bigdata.batchlayer.BatchWorkflow.batchWorkflow;
 import static tp.bigdata.test.DataProcess.makeFacts;
+import static tp.bigdata.batchviews.BatchViews.batchViews;
 
-@SuppressWarnings({ "unchecked", "rawtypes" })
+@SuppressWarnings({ "unchecked", "rawtypes", "unused" })
 public class Main {
 	public static void main(String[] args) throws Exception {
 		if (args.length != 1) {
@@ -38,15 +38,15 @@ public class Main {
 		
 		initTestData(path);
 		batchWorkflow();
+		batchViews();
 	}
 	
 	public static void initTestData(String path) throws Exception {
 		FileSystem fs = FileSystem.get(new Configuration());
-//		fs.setPermission(new Path(ROOT), new FsPermission("777"));
         fs.delete(new Path(DATA_ROOT), true);
         fs.mkdirs(new Path(DATA_ROOT));
 		
-        Pail masterPail = Pail.create(MASTER_ROOT, new SplitDataPailStructure());
+		Pail masterPail = Pail.create(MASTER_ROOT, new SplitDataPailStructure());
         Pail newPail = Pail.create(NEW_ROOT, new DataPailStructure());
 
         Pail.TypedRecordOutputStream os;
