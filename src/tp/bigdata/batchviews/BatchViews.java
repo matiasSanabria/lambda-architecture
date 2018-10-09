@@ -35,10 +35,10 @@ public class BatchViews {
 				.predicate(new Multiply(), "?quantity", "?salePrice").out("?total")
 				.predicate(Option.SORT, "?username");
 		
-		String tableName = "product_purchase";
+		String tableName = "product_purchased";
 		String familyName = "purchase";
 		Fields keyFields = new Fields("?username");
-		Fields valueFields = new Fields("?username", "?quantity");
+		Fields valueFields = new Fields("?username", "?quantity_purchased", "?total");
 		
 		HBaseScheme hBaseScheme = new HBaseScheme(keyFields, familyName, valueFields);
 		HBaseTap hBaseTap = new HBaseTap(tableName, hBaseScheme);
@@ -46,7 +46,7 @@ public class BatchViews {
 		Api.execute(hBaseTap, reduced);
 		
 		// para mostrar la consulta en pantalla
-		Api.execute(new StdoutTap(), reduced);
+		//Api.execute(new StdoutTap(), reduced);
 		
 	}
 	
