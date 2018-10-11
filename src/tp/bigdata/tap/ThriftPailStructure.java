@@ -8,9 +8,10 @@ import org.apache.thrift.TDeserializer;
 import org.apache.thrift.TException;
 import org.apache.thrift.TSerializer;
 
-@SuppressWarnings({ "rawtypes", "serial", "unchecked" })
+@SuppressWarnings({ "rawtypes", "unchecked" })
 public abstract class ThriftPailStructure<T extends Comparable> implements PailStructure<T> {
-  protected abstract T createThriftObject();
+
+protected abstract T createThriftObject();
 
   private transient TDeserializer des;
 

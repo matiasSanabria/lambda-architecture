@@ -9,8 +9,9 @@ import java.util.List;
 import tp.bigdata.schema.DataUnit;
 import org.apache.thrift.TFieldIdEnum;
 
-@SuppressWarnings({"serial","rawtypes", "unchecked"})
+@SuppressWarnings({"rawtypes", "unchecked"})
 public class SplitDataPailTap extends PailTap {
+
 	public static class SplitDataPailTapOptions {
         public PailSpec spec = null;
         public String fieldName = "data";

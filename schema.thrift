@@ -20,7 +20,8 @@ struct FactsEdge {
 	2: required Page page;
 	3: required Product product;
 	4: i32 quantity;
-	5: string date;
+	5: double price;
+	6: string date;
 }
 
 # Properties

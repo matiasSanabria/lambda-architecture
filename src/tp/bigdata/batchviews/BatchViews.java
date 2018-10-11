@@ -29,24 +29,24 @@ public class BatchViews {
 		
 		Subquery reduced = new Subquery("?username", "?quantity_purchased", "?total")
 				.predicate(src, "_", "?data")
-				.predicate(new ExtractFactsFields(), "?data").out("?username", "?url", "?barcode", "?quantity", "?salePrice", "?date", "?timestamp")
+				.predicate(new ExtractFactsFields(), "?data").out("?username", "?url", "?barcode", "?quantity", "?price", "?date", "?timestamp")
 				.predicate(Option.DISTINCT, "?username").out("?username")
 				.predicate(new Sum(), "?quantity").out("?quantity_purchased")
-				.predicate(new Multiply(), "?quantity", "?salePrice").out("?total")
+				.predicate(new Multiply(), "?quantity", "?price").out("?total")
 				.predicate(Option.SORT, "?username");
 		
-		String tableName = "product_purchased";
-		String familyName = "purchase";
+		String tableName = "factsEdge";
+//		String familyName = "purchase";
 		Fields keyFields = new Fields("?username");
-		Fields valueFields = new Fields("?username", "?quantity_purchased", "?total");
+		Fields valueFields = new Fields("?quantity_purchased", "?total");
 		
-		HBaseScheme hBaseScheme = new HBaseScheme(keyFields, familyName, valueFields);
+		HBaseScheme hBaseScheme = new HBaseScheme(keyFields, valueFields);
 		HBaseTap hBaseTap = new HBaseTap(tableName, hBaseScheme);
 		
-		Api.execute(hBaseTap, reduced);
-		
 		// para mostrar la consulta en pantalla
-		//Api.execute(new StdoutTap(), reduced);
+		Api.execute(new StdoutTap(), reduced);
+		
+		Api.execute(hBaseTap, reduced);
 		
 	}
 	
@@ -59,12 +59,18 @@ public class BatchViews {
             FactsEdge factsEdge = data.get_dataUnit()
                     .get_factsEdge();
 
+            System.out.println("username: "+factsEdge.get_user().get_username());
+            System.out.println("page url: "+ factsEdge.get_page().get_url());
+            System.out.println("product barcode: "+ factsEdge.get_product().get_barcode());
+            System.out.println("quantity: "+ factsEdge.get_quantity());
+            System.out.println("price: " + factsEdge.get_price());
+            System.out.println("date: " + factsEdge.get_date());
             call.getOutputCollector().add(new Tuple(
                     factsEdge.get_user().get_username(),
                     factsEdge.get_page().get_url(),
                     factsEdge.get_product().get_barcode(),
                     factsEdge.get_quantity(),
-                    factsEdge.get_product().get_price(),
+                    factsEdge.get_price(),
                     factsEdge.get_date(),
                     data.get_pedigree().get_trueAsOfSecs()
             ));

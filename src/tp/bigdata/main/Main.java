@@ -38,6 +38,7 @@ public class Main {
 		
 		initTestData(path);
 		batchWorkflow();
+		System.out.println("fin de la ejecución del batch layer");
 		batchViews();
 	}
 	
@@ -71,14 +72,17 @@ public class Main {
 					String url = tokens[1];
 					String barcode = tokens[2];
 					String quantity = tokens[3];
-					String date = tokens[4];
+					String price = tokens[4];
+					String date = tokens[5];
 					Long timeSecs = new Date().getTime();
 					
 					os.writeObject(
 							makeFacts(
 									username, 
 									url, 
-									barcode,Integer.parseInt(quantity), 
+									barcode,
+									Integer.parseInt(quantity), 
+									Double.parseDouble(price),
 									date, 
 									timeSecs));
 				}

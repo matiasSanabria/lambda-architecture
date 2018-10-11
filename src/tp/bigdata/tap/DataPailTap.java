@@ -4,8 +4,9 @@ import com.backtype.cascading.tap.PailTap;
 import com.backtype.hadoop.pail.PailSpec;
 import com.backtype.hadoop.pail.PailStructure;
 
-@SuppressWarnings({"serial", "rawtypes"})
+@SuppressWarnings({"rawtypes"})
 public class DataPailTap extends PailTap {
+
 	public static class DataPailTapOptions {
 		public PailSpec spec = null;
         public String fieldName = "data";

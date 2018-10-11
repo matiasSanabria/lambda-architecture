@@ -37,12 +37,10 @@ import org.slf4j.LoggerFactory;
 public class Product extends org.apache.thrift.TUnion<Product, Product._Fields> {
   private static final org.apache.thrift.protocol.TStruct STRUCT_DESC = new org.apache.thrift.protocol.TStruct("Product");
   private static final org.apache.thrift.protocol.TField BARCODE_FIELD_DESC = new org.apache.thrift.protocol.TField("barcode", org.apache.thrift.protocol.TType.STRING, (short)1);
-  private static final org.apache.thrift.protocol.TField PRICE_FIELD_DESC = new org.apache.thrift.protocol.TField("price", org.apache.thrift.protocol.TType.DOUBLE, (short)2);
 
   /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
   public enum _Fields implements org.apache.thrift.TFieldIdEnum {
-    BARCODE((short)1, "barcode"),
-    PRICE((short)2, "price");
+    BARCODE((short)1, "barcode");
 
     private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
 
@@ -59,8 +57,6 @@ public class Product extends org.apache.thrift.TUnion<Product, Product._Fields> 
       switch(fieldId) {
         case 1: // BARCODE
           return BARCODE;
-        case 2: // PRICE
-          return PRICE;
         default:
           return null;
       }
@@ -105,8 +101,6 @@ public class Product extends org.apache.thrift.TUnion<Product, Product._Fields> 
     Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(_Fields.class);
     tmpMap.put(_Fields.BARCODE, new org.apache.thrift.meta_data.FieldMetaData("barcode", org.apache.thrift.TFieldRequirementType.DEFAULT, 
         new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING)));
-    tmpMap.put(_Fields.PRICE, new org.apache.thrift.meta_data.FieldMetaData("price", org.apache.thrift.TFieldRequirementType.DEFAULT, 
-        new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.DOUBLE)));
     metaDataMap = Collections.unmodifiableMap(tmpMap);
     org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(Product.class, metaDataMap);
   }
@@ -132,12 +126,6 @@ public class Product extends org.apache.thrift.TUnion<Product, Product._Fields> 
     return x;
   }
 
-  public static Product price(double value) {
-    Product x = new Product();
-    x.set_price(value);
-    return x;
-  }
-
 
   @Override
   protected void checkType(_Fields setField, Object value) throws ClassCastException {
@@ -147,11 +135,6 @@ public class Product extends org.apache.thrift.TUnion<Product, Product._Fields> 
           break;
         }
         throw new ClassCastException("Was expecting value of type String for field 'barcode', but got " + value.getClass().getSimpleName());
-      case PRICE:
-        if (value instanceof Double) {
-          break;
-        }
-        throw new ClassCastException("Was expecting value of type Double for field 'price', but got " + value.getClass().getSimpleName());
       default:
         throw new IllegalArgumentException("Unknown field id " + setField);
     }
@@ -167,15 +150,6 @@ public class Product extends org.apache.thrift.TUnion<Product, Product._Fields> 
             String barcode;
             barcode = iprot.readString();
             return barcode;
-          } else {
-            org.apache.thrift.protocol.TProtocolUtil.skip(iprot, field.type);
-            return null;
-          }
-        case PRICE:
-          if (field.type == PRICE_FIELD_DESC.type) {
-            Double price;
-            price = iprot.readDouble();
-            return price;
           } else {
             org.apache.thrift.protocol.TProtocolUtil.skip(iprot, field.type);
             return null;
@@ -196,10 +170,6 @@ public class Product extends org.apache.thrift.TUnion<Product, Product._Fields> 
         String barcode = (String)value_;
         oprot.writeString(barcode);
         return;
-      case PRICE:
-        Double price = (Double)value_;
-        oprot.writeDouble(price);
-        return;
       default:
         throw new IllegalStateException("Cannot write union with unknown field " + setField_);
     }
@@ -214,10 +184,6 @@ public class Product extends org.apache.thrift.TUnion<Product, Product._Fields> 
           String barcode;
           barcode = iprot.readString();
           return barcode;
-        case PRICE:
-          Double price;
-          price = iprot.readDouble();
-          return price;
         default:
           throw new IllegalStateException("setField wasn't null, but didn't match any of the case statements!");
       }
@@ -233,10 +199,6 @@ public class Product extends org.apache.thrift.TUnion<Product, Product._Fields> 
         String barcode = (String)value_;
         oprot.writeString(barcode);
         return;
-      case PRICE:
-        Double price = (Double)value_;
-        oprot.writeDouble(price);
-        return;
       default:
         throw new IllegalStateException("Cannot write union with unknown field " + setField_);
     }
@@ -247,8 +209,6 @@ public class Product extends org.apache.thrift.TUnion<Product, Product._Fields> 
     switch (setField) {
       case BARCODE:
         return BARCODE_FIELD_DESC;
-      case PRICE:
-        return PRICE_FIELD_DESC;
       default:
         throw new IllegalArgumentException("Unknown field id " + setField);
     }
@@ -283,26 +243,8 @@ public class Product extends org.apache.thrift.TUnion<Product, Product._Fields> 
     value_ = value;
   }
 
-  public double get_price() {
-    if (getSetField() == _Fields.PRICE) {
-      return (Double)getFieldValue();
-    } else {
-      throw new RuntimeException("Cannot get field 'price' because union is currently set to " + getFieldDesc(getSetField()).name);
-    }
-  }
-
-  public void set_price(double value) {
-    setField_ = _Fields.PRICE;
-    value_ = value;
-  }
-
   public boolean is_set_barcode() {
     return setField_ == _Fields.BARCODE;
-  }
-
-
-  public boolean is_set_price() {
-    return setField_ == _Fields.PRICE;
   }
 
 

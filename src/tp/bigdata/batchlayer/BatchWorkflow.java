@@ -7,6 +7,7 @@ import com.backtype.hadoop.pail.PailSpec;
 import com.backtype.hadoop.pail.PailStructure;
 import cascalog.ops.IdentityBuffer;
 import cascalog.ops.RandLong;
+
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -20,7 +21,7 @@ import org.apache.hadoop.fs.Path;
 
 @SuppressWarnings({ "rawtypes", "unchecked" })
 public class BatchWorkflow {
-	public static final String ROOT = "/";
+	public static final String ROOT = "/home/hadoop/batchlayer/";
 	public static final String DATA_ROOT = ROOT + "data/";
 	public static final String MASTER_ROOT = DATA_ROOT + "master/";
 	public static final String NEW_ROOT = DATA_ROOT + "new/";
@@ -36,10 +37,9 @@ public class BatchWorkflow {
 
 	public static void ingest(Pail masterPail, Pail newDataPail) throws IOException {
 		FileSystem fs = FileSystem.get(new Configuration());
-		Path tempRootPath = new Path(TEMP_ROOT);
-		
-		fs.delete(tempRootPath, true);
-		fs.mkdirs(tempRootPath);
+
+		fs.delete(new Path(TEMP_ROOT), true);
+		fs.mkdirs(new Path(TEMP_ROOT));
 		String snapshotPath = TEMP_ROOT + "newDataSnapshot";
 
 		Pail snapshotPail = newDataPail.snapshot(snapshotPath);
@@ -48,28 +48,33 @@ public class BatchWorkflow {
 	}
 
 	public static void appendNewDataToMasterDataPail(Pail masterPail, String snapshotPath) throws IOException {
-		Pail shreddedPail = shred(snapshotPath);
-		masterPail.absorb(shreddedPail);
+        Pail shreddedPail = shred(snapshotPath);
+        masterPail.absorb(shreddedPail);
 	}
 
 	public static Pail shred(String dataPath) throws IOException {
 		String shreddedPath = TEMP_ROOT + "shredded";
 
-		PailTap source = dataTap(dataPath);
-		PailTap sink = splitDataTap(shreddedPath);
+        PailTap source = dataTap(dataPath);
+        PailTap sink = splitDataTap(shreddedPath);
 
-		Subquery reduced = new Subquery("?rand", "?data").predicate(new RandLong(), "?rand")
-				.predicate(source, "_", "?data-in").predicate(new IdentityBuffer(), "?data-in").out("?data");
+        Subquery reduced = new Subquery("?rand", "?data")
+                .predicate(new RandLong(), "?rand")
+                .predicate(source, "_", "?data-in")
+                .predicate(new IdentityBuffer(), "?data-in").out("?data");
 
-		Api.execute(sink, new Subquery("?data").predicate(reduced, "_", "?data"));
-		Pail shreddedPail = new Pail(shreddedPath);
-		shreddedPail.consolidate();
-		return shreddedPail;
+        Api.execute(
+                sink,
+                new Subquery("?data")
+                        .predicate(reduced, "_", "?data"));
+        Pail shreddedPail = new Pail(shreddedPath);
+        shreddedPail.consolidate();
+        return shreddedPail;
 	}
 
 	public static void setApplicationConf() {
 		Map conf = new HashMap();
-        String sers = "com.backtype.hadoop.ThriftSerialization";
+        String sers = "backtype.hadoop.ThriftSerialization";
         sers += ",";
         sers += "org.apache.hadoop.io.serializer.WritableSerialization";
         conf.put("io.serializations", sers);

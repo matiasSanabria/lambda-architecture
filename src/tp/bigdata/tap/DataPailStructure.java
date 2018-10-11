@@ -2,8 +2,9 @@ package tp.bigdata.tap;
 
 import tp.bigdata.schema.Data;
 
-@SuppressWarnings({ "rawtypes", "serial" })
+@SuppressWarnings({ "rawtypes"})
 public class DataPailStructure extends ThriftPailStructure<Data> {
+
 	@Override
 	protected Data createThriftObject() {
 		return new Data();
