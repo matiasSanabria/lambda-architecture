@@ -25,7 +25,7 @@ import static tp.bigdata.batchlayer.BatchWorkflow.splitDataTap;
 
 public class BatchViews {
 	public static void batchViews() throws IOException {
-		PailTap src = splitDataTap(MASTER_ROOT);
+		PailTap src = splitDataTap(MASTER_ROOT + "4/factsEdge/");
 		
 		Subquery reduced = new Subquery("?username", "?quantity_purchased", "?total")
 				.predicate(src, "_", "?data")
@@ -33,10 +33,10 @@ public class BatchViews {
 				.predicate(Option.DISTINCT, "?username").out("?username")
 				.predicate(new Sum(), "?quantity").out("?quantity_purchased")
 				.predicate(new Multiply(), "?quantity", "?price").out("?total")
-				.predicate(Option.SORT, "?username");
+				.predicate(Option.SORT, "?total");
 		
-		String tableName = "factsEdge";
-//		String familyName = "purchase";
+		String tableName = "product_purchased";
+		String familyName = "purchase";
 		Fields keyFields = new Fields("?username");
 		Fields valueFields = new Fields("?quantity_purchased", "?total");
 		
@@ -59,12 +59,12 @@ public class BatchViews {
             FactsEdge factsEdge = data.get_dataUnit()
                     .get_factsEdge();
 
-            System.out.println("username: "+factsEdge.get_user().get_username());
-            System.out.println("page url: "+ factsEdge.get_page().get_url());
-            System.out.println("product barcode: "+ factsEdge.get_product().get_barcode());
-            System.out.println("quantity: "+ factsEdge.get_quantity());
-            System.out.println("price: " + factsEdge.get_price());
-            System.out.println("date: " + factsEdge.get_date());
+//            System.out.println("username: "+factsEdge.get_user().get_username());
+//            System.out.println("page url: "+ factsEdge.get_page().get_url());
+//            System.out.println("product barcode: "+ factsEdge.get_product().get_barcode());
+//            System.out.println("quantity: "+ factsEdge.get_quantity());
+//            System.out.println("price: " + factsEdge.get_price());
+//            System.out.println("date: " + factsEdge.get_date());
             call.getOutputCollector().add(new Tuple(
                     factsEdge.get_user().get_username(),
                     factsEdge.get_page().get_url(),

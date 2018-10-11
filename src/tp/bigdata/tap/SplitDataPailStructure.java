@@ -129,7 +129,6 @@ public class SplitDataPailStructure extends DataPailStructure {
                 switch (fieldName) {
                     case ("factsEdge"):
                         if (dirs.length < 3) return false;
-                    	System.out.println("dir[0]: " + dirs[0].toString() +"dir[1]: " + dirs[1].toString());
                         int year = Integer.parseInt(dirs[2]);
                         System.out.println("year: " + year);
                         return 1900 < year && year < 2100;
@@ -174,7 +173,6 @@ public class SplitDataPailStructure extends DataPailStructure {
         // criterios de particionamiento horizontal
         switch (fieldName) {
             case ("factsEdge"):
-            	System.out.println("Data Unit: " + du.toString());
             	// obtenemos el anho para realizar la particion
                 String[] date = du.get_factsEdge().get_date().split("/");
                 ret.add(date[2]);
